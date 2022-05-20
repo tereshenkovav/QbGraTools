@@ -516,3 +516,6 @@ SUB updateFPSCounter
   END IF
 END SUB
 
+FUNCTION isFPUPresent%
+  isFPUPresent% = isFPUPresentAsm%
+END FUNCTION

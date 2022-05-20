@@ -489,3 +489,30 @@ setPaletteAsm:
 
 	%include "popregs.asm"
     retf 8
+
+fpustatus dw 0
+
+global isFPUPresentAsm
+isFPUPresentAsm:
+	%include "pushregs.asm"
+
+	fninit
+	mov word [fpustatus],5A5Ah
+	fnstsw [fpustatus]
+	mov ax,[fpustatus]
+	cmp al,0
+	je fpu_ok
+	mov al,0
+	jmp fpu_fin
+
+fpu_ok:
+	mov al,1
+
+fpu_fin:
+	mov ah,0
+	mov [fpustatus],ax
+
+	%include "popregs.asm"
+
+	mov ax,[fpustatus]
+    retf
