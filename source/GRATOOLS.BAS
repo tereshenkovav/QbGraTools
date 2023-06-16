@@ -353,7 +353,7 @@ SUB internalLoadAllInBuf (buf() AS INTEGER, Sprite AS Sprite, Anim AS Animation,
 
     DEF SEG = VARSEG(buf(Handle + 2))
     bufp = VARPTR(buf(Handle + 2))
-    FOR y = 0 TO Sprite.h
+    FOR y = 0 TO Sprite.h - 1
        FOR x = 0 TO Sprite.w - 1
           POKE bufp, Pic(x, y)
           bufp = bufp + 1
@@ -378,7 +378,7 @@ SUB internalLoadAllInBuf (buf() AS INTEGER, Sprite AS Sprite, Anim AS Animation,
 
       DEF SEG = VARSEG(buf(Handle + 2))
       bufp = VARPTR(buf(Handle + 2))
-      FOR y = 0 TO Anim.h
+      FOR y = 0 TO Anim.h - 1
          FOR x = 0 TO Anim.w - 1
             POKE bufp, Pic(x + Anim.w * f, y)
             bufp = bufp + 1
