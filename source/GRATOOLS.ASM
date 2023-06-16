@@ -514,3 +514,12 @@ fpu_fin:
 
 	mov ax,[cs:fpustatus]
     retf
+
+POS_EXITCODE equ 4
+
+global exitWithRetCode
+exitWithRetCode:
+	mov	bp,sp
+	mov	ax,[bp+POS_EXITCODE]
+	mov	ah,4Ch
+	int	21h
