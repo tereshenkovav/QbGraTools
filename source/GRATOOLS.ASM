@@ -495,9 +495,9 @@ isFPUPresentAsm:
 	%include "pushregs.asm"
 
 	fninit
-	mov word [fpustatus],5A5Ah
-	fnstsw [fpustatus]
-	mov ax,[fpustatus]
+	mov word [cs:fpustatus],5A5Ah
+	fnstsw [cs:fpustatus]
+	mov ax,[cs:fpustatus]
 	cmp al,0
 	je fpu_ok
 	mov al,0
@@ -508,9 +508,9 @@ fpu_ok:
 
 fpu_fin:
 	mov ah,0
-	mov [fpustatus],ax
+	mov [cs:fpustatus],ax
 
 	%include "popregs.asm"
 
-	mov ax,[fpustatus]
+	mov ax,[cs:fpustatus]
     retf
