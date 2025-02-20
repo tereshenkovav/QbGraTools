@@ -523,3 +523,33 @@ exitWithRetCode:
 	mov	ax,[bp+POS_EXITCODE]
 	mov	ah,4Ch
 	int	21h
+
+global isFileExistsAsm
+isFileExistsAsm:
+	%include "pushregs.asm"
+
+	mov	bx,[bp+8]
+	mov 	dx,[bx]
+	mov 	bx,[bp+6]
+	mov     ds,[bx]
+
+	mov	ah,3Dh
+	mov	al,00h
+	int	21h
+
+	mov	bx,ax
+
+	jc no_file_exist
+	; close handle
+	mov	ah,3Dh
+	int	21h
+
+	%include "popregs.asm"
+        mov ax,1
+	retf 4
+
+no_file_exist:
+
+	%include "popregs.asm"
+        mov ax,0
+	retf 4

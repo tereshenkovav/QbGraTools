@@ -519,3 +519,19 @@ END SUB
 FUNCTION isFPUPresent%
   isFPUPresent% = isFPUPresentAsm%
 END FUNCTION
+
+FUNCTION isFileExists% (filename AS STRING)
+
+  DIM strz(128) AS INTEGER
+  DEF SEG = VARSEG(strz(0))
+  p = VARPTR(strz(0))
+  for i=1 to LEN(filename)
+    POKE p,ASC(MID$(filename,i,1))
+    p=p+1
+  next i
+  POKE p,0
+  DEF SEG
+
+  isFileExists% = isFileExistsAsm%(VARPTR(strz(0)), VARSEG(strz(0)))
+
+END FUNCTION
