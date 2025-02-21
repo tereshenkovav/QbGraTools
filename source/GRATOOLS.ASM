@@ -508,11 +508,8 @@ fpu_ok:
 
 fpu_fin:
 	mov ah,0
-	mov [cs:fpustatus],ax
 
 	%include "popregs.asm"
-
-	mov ax,[cs:fpustatus]
     retf
 
 POS_EXITCODE equ 4

@@ -1,7 +1,6 @@
 	pop	dx
 	pop	cx
 	pop	bx
-	pop	ax
 	pop	ds
 	pop	si
 	pop 	es
