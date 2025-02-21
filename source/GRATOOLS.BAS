@@ -535,3 +535,15 @@ FUNCTION isFileExists% (filename AS STRING)
   isFileExists% = isFileExistsAsm%(VARPTR(strz(0)), VARSEG(strz(0)))
 
 END FUNCTION
+
+SUB readJoystickByPort(StickX AS INTEGER, StickY AS INTEGER, ButA AS INTEGER, ButB AS INTEGER, IsJoystickFound AS INTEGER)
+  DIM JoyBuf(5) AS INTEGER
+
+  CALL readJoystickByPortAsm(VARPTR(JoyBuf(0)), VARSEG(JoyBuf(0)))
+
+  StickX = JoyBuf(0)
+  StickY = JoyBuf(1)
+  ButA = JoyBuf(2)
+  ButB = JoyBuf(3)
+  IsJoystickFound = JoyBuf(4)
+END SUB

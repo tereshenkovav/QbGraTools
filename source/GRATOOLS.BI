@@ -58,6 +58,7 @@ DECLARE SUB setPaletteAsm (BufPalAddr AS INTEGER, BufPalSeg AS INTEGER, BYVAL st
 DECLARE FUNCTION isFPUPresentAsm% ()
 DECLARE SUB exitWithRetCode (BYVAL exitcode AS INTEGER)
 DECLARE FUNCTION isFileExistsAsm% (FileNameAddr AS INTEGER, FileNameSeg AS INTEGER)
+DECLARE SUB readJoystickByPortAsm (BufAddr AS INTEGER, BufSeg AS INTEGER)
 
 ' loader proc
 
@@ -83,3 +84,5 @@ DECLARE SUB startFPSCounter ()
 DECLARE FUNCTION getFPS% ()
 DECLARE FUNCTION RGB2Pal& (rgb AS ColorRGB)
 DECLARE SUB SetBrightRGB (rgb AS ColorRGB, bright AS SINGLE)
+DECLARE FUNCTION isJoystickPortPresent% ()
+DECLARE SUB readJoystickByPort(StickX AS INTEGER, StickY AS INTEGER, ButA AS INTEGER, ButB AS INTEGER, IsJoystickFound AS INTEGER)

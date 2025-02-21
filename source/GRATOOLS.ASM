@@ -550,3 +550,88 @@ no_file_exist:
 	%include "popregs.asm"
         mov ax,0
 	retf 4
+
+global isJoystickPortPresent
+isJoystickPortPresent:
+	%include "pushregs.asm"
+
+	mov ah,84h
+	mov dx,0
+	int 15h
+	jc no_joystick
+        %include "popregs.asm"
+	mov ax,1
+        retf
+no_joystick:
+        %include "popregs.asm"
+	mov ax,0
+        retf
+
+joystick201x dw 0
+joystick201y dw 0
+joystick201a dw 0
+joystick201b dw 0
+joystick201found dw 0
+
+global readJoystickByPortAsm
+readJoystickByPortAsm:
+	%include "pushregs.asm"
+
+	mov	bx,[bp+8]
+	mov 	di,[bx]
+	mov 	bx,[bp+6]
+	mov     es,[bx]
+
+	cld
+
+	xor	ax,ax
+	mov     [cs:joystick201x], ax
+	mov     [cs:joystick201y], ax
+	mov	ax,1
+        mov     [cs:joystick201found], ax
+
+        sub     cx, cx
+        mov     dx, 201h
+        in      al, dx
+        not     al
+        mov     ah, al
+        and     ax, 2010h
+        mov     [cs:joystick201a], al
+        shr     ah, 1
+        mov     [cs:joystick201b], ah
+        mov     bx, 0201h
+        cli
+        out     dx, al
+        mov     ah, 0
+    joystick_cicle:
+        in      al, dx
+        and     al, bl
+        add     [cs:joystick201x], ax
+        in      al, dx
+        and     al, bh
+        shr     al, 1
+        add     [cs:joystick201y], ax
+        in      al, dx
+        test    al, 3
+        jz      joystick_end
+        inc     cx
+        jnz     joystick_cicle
+        xor     ax,ax
+        mov     [cs:joystick201found], ax
+    joystick_end:
+
+        sti
+
+	mov ax,[cs:joystick201x]
+	stosw
+	mov ax,[cs:joystick201y]
+	stosw
+	mov ax,[cs:joystick201a]
+	stosw
+	mov ax,[cs:joystick201b]
+	stosw
+	mov ax,[cs:joystick201found]
+	stosw
+
+	%include "popregs.asm"
+	retf 4
