@@ -52,7 +52,7 @@ qb.exe /l gratools.qlb
 массивы как динамические (иначе возможны проблемы с получением EXE-файлов)
 и включить режим экрана 13. 
 
-```
+```BASIC
 '$INCLUDE: 'gratools.bi'
 '$DYNAMIC
 SCREEN 13
