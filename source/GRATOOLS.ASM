@@ -635,3 +635,89 @@ readJoystickByPortAsm:
 
 	%include "popregs.asm"
 	retf 4
+
+; Блок данных для обработки клавиатуры
+oldint09 dw 0,0 ; Старый адрес прерывания
+holdbuf times 128 db 2 ; Карта для памяти нажатия клавиш - по байту на клавишу
+
+newint09:
+	pusha
+	pushf
+
+	mov cl,1    ; По умолчанию 1
+	xor ax,ax
+
+	in  al,60h  ; Читаем скан-код, сохраняем его
+
+	cmp al,0
+	je skipkey
+	cmp al,224  ; Пропускаем расширенный код
+	je skipkey
+	cmp ax,128  ; Здесь не срабатывало сравнение al,128  нужно чекать старший бит
+	jl updhold  ; Если код меньше 128, то переходим сразу к установке 1
+
+	sub ax,128  ; Иначе нужно вычесть 128 и заменить cl на 0 - это отжатие
+	mov cl,0
+
+updhold:
+	mov bx,ax
+	mov [cs:holdbuf+bx],cl
+
+skipkey:
+	popf
+	popa
+
+	jmp word far [cs:oldint09] ; Переход к старому прерыванию
+
+global setNewKeyHandler
+setNewKeyHandler:
+	%include "pushregs.asm"
+
+	cld
+
+	; Начальная чистка карты нажатых клавиш
+	mov ax,seg holdbuf
+	mov es,ax
+	mov di,holdbuf
+	mov cx,64
+	xor ax,ax
+	rep stosw
+
+	; Сохраняем старые векторы прерываний
+	mov ax,3509h
+	int 21h
+	mov [cs:oldint09+2],es
+	mov [cs:oldint09],bx
+
+	; Ставим новый обработчик
+	mov ax,seg newint09
+	mov ds,ax
+	mov dx,newint09
+	mov ax,2509h
+	int 21h
+
+	%include "popregs.asm"
+	retf
+
+global setOldKeyHandler
+setOldKeyHandler:
+	%include "pushregs.asm"
+
+	mov ax,2509h
+	mov ds,[cs:oldint09+2]
+	mov dx,[cs:oldint09]
+	int 21h
+
+	%include "popregs.asm"
+	retf
+
+global isKeyPressed
+isKeyPressed:
+	%include "pushregs.asm"
+
+	xor ax,ax
+	mov bx,[bp+6]
+	mov al,[cs:holdbuf+bx]
+
+	%include "popregs.asm"
+        retf 2
