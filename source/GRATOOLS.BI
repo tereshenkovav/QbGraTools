@@ -85,6 +85,7 @@ DECLARE FUNCTION getFPS% ()
 DECLARE FUNCTION RGB2Pal& (rgb AS ColorRGB)
 DECLARE SUB SetBrightRGB (rgb AS ColorRGB, bright AS SINGLE)
 DECLARE FUNCTION isJoystickPortPresent% ()
+DECLARE FUNCTION isMouseDriverPresent% ()
 DECLARE SUB readJoystickByPort(StickX AS INTEGER, StickY AS INTEGER, ButA AS INTEGER, ButB AS INTEGER, IsJoystickFound AS INTEGER)
 
 ' keyboard proc

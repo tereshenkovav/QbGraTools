@@ -326,6 +326,23 @@ getMouseAsm:
 	%include "popregs.asm"	
 	retf 4
 
+global isMouseDriverPresent
+isMouseDriverPresent:
+	%include "pushregs.asm"
+
+	mov 	ax, 0
+	int 	33h
+
+	cmp	ax,0
+	je mouse_fin
+
+	mov 	ax,1
+
+mouse_fin:
+
+	%include "popregs.asm"
+    retf
+
 MOUSEWINDOW_X1 equ 12
 MOUSEWINDOW_Y1 equ 10
 MOUSEWINDOW_X2 equ 8
