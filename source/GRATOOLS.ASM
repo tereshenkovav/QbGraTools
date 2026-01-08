@@ -365,6 +365,21 @@ setMouseWindowAsm:
 	%include "popregs.asm"	
 	retf 8
 
+MOUSEPOS_X equ 8
+MOUSEPOS_Y equ 6
+
+global setMousePos
+setMousePos:
+	%include "pushregs.asm"
+
+	mov	ax,04h
+	mov	cx,[bp+MOUSEPOS_X]
+	mov	dx,[bp+MOUSEPOS_Y]
+	int 	33h
+
+	%include "popregs.asm"
+	retf 4
+
 DRAWCHAR_X equ 12
 DRAWCHAR_Y equ 10
 DRAWCHAR_CHAR equ 8
