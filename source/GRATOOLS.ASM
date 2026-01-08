@@ -326,6 +326,44 @@ getMouseAsm:
 	%include "popregs.asm"	
 	retf 4
 
+global getMouseResolutionAsm
+getMouseResolutionAsm:
+	%include "pushregs.asm"
+
+	mov	bx,[bp+8]
+	mov 	di,[bx]
+	mov 	bx,[bp+6]
+	mov     es,[bx]
+
+	; save current pos
+	mov 	ax,03h
+	int 	33h
+	push	cx
+	push	dx
+	; set big pos for trunk in driver
+	mov	ax,04h
+	mov	cx,1024
+	mov	dx,1024
+	int 	33h
+	; get trunked pos and store in es:di
+	mov 	ax,03h
+	int 	33h
+
+	cld
+
+	mov ax,cx
+	stosw
+	mov ax,dx
+	stosw
+	; restore saved pos
+	mov	ax,04h
+	pop	dx
+	pop	cx
+	int 	33h
+
+	%include "popregs.asm"
+	retf 4
+
 global isMouseDriverPresent
 isMouseDriverPresent:
 	%include "pushregs.asm"

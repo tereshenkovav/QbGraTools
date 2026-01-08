@@ -4,6 +4,7 @@ DEFINT A-Z
 CLS
 
 mouseok = isMouseDriverPresent%
+CALL getMouseResolution(mouserx, mousery)
 
 LOCATE 2, 2: PRINT "Mouse driver:";
 LOCATE 2, 16
@@ -16,6 +17,8 @@ ELSE
 END IF
 
 COLOR 7
+
+LOCATE 3, 2: PRINT "Resolution:"; mouserx; "x"; mousery
 
 CALL getMouse(oldmx, oldmy, ml, mb)
 
@@ -32,19 +35,20 @@ WHILE (1 = 1)
 
   IF (ml <> 0) AND (mb <> 0) THEN
     IF (mx = 0) AND (mx < oldmx) THEN
-      CALL setMousePos(639, my): mx = 639
+      CALL setMousePos(mouserx, my): mx = mouserx
     ELSE
-      IF (mx = 639) AND (mx > oldmx) THEN CALL setMousePos(0, my): mx = 0
+      IF (mx = mouserx) AND (mx > oldmx) THEN CALL setMousePos(0, my): mx = 0
     END IF
     IF (my = 0) AND (my < oldmy) THEN
-      CALL setMousePos(mx, 199): my = 199
+      CALL setMousePos(mx, mousery): my = mousery
     ELSE
-      IF (my = 199) AND (my > oldmy) THEN CALL setMousePos(mx, 1): my = 0
+      IF (my = mousery) AND (my > oldmy) THEN CALL setMousePos(mx, 0): my = 0
     END IF
   END IF
-
+ 
   oldmx = mx
   oldmy = my
   IF INKEY$ = CHR$(27) THEN END
+
 WEND
 

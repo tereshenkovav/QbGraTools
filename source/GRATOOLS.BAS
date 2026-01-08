@@ -206,6 +206,14 @@ SUB getMouse (MouseX AS INTEGER, MouseY AS INTEGER, ButLeft AS INTEGER, ButRight
   IF (MouseBuf(2) AND 2) = 2 THEN ButRight = 1 ELSE ButRight = 0
 END SUB
 
+SUB getMouseResolution (MouseRX AS INTEGER, MouseRY AS INTEGER)
+  DIM MouseBuf(2) AS INTEGER
+
+  CALL getMouseResolutionAsm(VARPTR(MouseBuf(0)), VARSEG(MouseBuf(0)))
+  MouseRX = MouseBuf(0)
+  MouseRY = MouseBuf(1)
+END SUB
+
 SUB initSpriteBuf (buf() AS INTEGER)
   buf(0) = 0
   buf(1) = 2
